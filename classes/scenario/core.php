@@ -24,7 +24,7 @@ class Scenario_Core
      */
 	public static function factory($scenario = null)
     {
-		return new Decision($scenario);	
+		return new Scenario($scenario);	
     }
 	
 	function create()
