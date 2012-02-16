@@ -2,11 +2,12 @@
 class Model_Mango_Scenario extends Mango {
 
 	protected $_fields = array(
+	/*
 		'description'	=> array(
 			'type'		=>'string',
 			'required' 	=> true,
 			'not_empty'	=> true,
-		),
+		),*/
 		'title'	=> array(
 			'type'		=>'string',
 			'required' 	=> true,

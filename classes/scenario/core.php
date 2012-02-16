@@ -14,6 +14,8 @@ class Scenario_Core
 	
 	private $_view;
 	
+	public $mango_object;
+	
 	public $data;
 	
 	public $errors;
@@ -66,8 +68,8 @@ class Scenario_Core
 		}
 		elseif ( $all == false AND $scenario_id != null )//else if you only want one scenario and you have the id
 		{
-			$the_scenario = Mango::factory('Mango_Scenario', array('_id' => (string)$scenario_id))->load()->as_array(false);//load the single scenario as an array
-			$this->data = $the_scenario;//set the data var to the single scenario
+			$the_scenario = Mango::factory('Mango_Scenario', array('_id' => (string)$scenario_id))->load();//load the single scenario 
+			$this->data = $the_scenario->as_array(false);//set the data var to the single scenario as an array
 			return $this;//return the scenario object
 		}
 		else { $this->errors = array('bad_data' => 'The provided data is no good.'); return $this; }//otherwise return error messages
@@ -132,11 +134,12 @@ class Scenario_Core
 				$this->errors = $e->array->errors('node'); // return errors if it does not conform to the mango model
 				return $this;//return the scenario object
 			}
-			$the_node->update();
-			$this->data = $the_node->as_array(false);
-			return $this;
+			$the_node->update();//update the node in the db
+			$this->data = $the_node->as_array(false);//set the data var with the updated node array
+			return $this;//return the scenario object
 		} else { $this->errors = array('bad_data' => 'The provided data is no good.'); return $this; }//otherwise return error messages
 	}
+	
 	
 	function update_scenario($update_data = null, $scenario_id = null)
 	{
@@ -156,21 +159,81 @@ class Scenario_Core
 				$this->errors = $e->array->errors('scenario'); // return errors if it does not conform to the mango model
 				return $this;//return the scenario object
 			}
-			$the_scenario->update();
-			$this->data = $the_scenario->as_array(false);
-			return $this;
+			$the_scenario->update();//update the scenario in the db
+			$this->data = $the_scenario->as_array(false);//set the data var with the updated scenario array
+			return $this;//return the scenario object
 		} else { $this->errors = array('bad_data' => 'The provided data is no good.'); return $this; }//otherwise return error messages
 	}
 	
-	function search_scenario()
+	
+	function search_scenarios($search_string = null)
 	{
-		
+		if ( $search_string != null )//make sure $search_string is not null
+		{
+			$matches = array();//reset $matches 
+			$the_scenarios = $this->get_scenario(true)->data;//load the scenarios and set $the_scenarios
+			foreach($the_scenarios as $scenario)//loop through the scenarios
+			{
+				if ( preg_match('/' . $search_string . '/Uis', $scenario['title']) )//check the scenario's title for the search string
+				{
+					$matches[] = $scenario;//if a match is found set a new element of the $matches array
+				}
+			}
+			$this->data = $matches;//set the data var
+			return $this;//return the scenario object
+		} else { $this->errors = array('no_string' => 'You did not provide a search string'); return $this; }//error if no search string provided
 	}
 	
-	function search_nodes()
+	
+	function search_nodes($search_string = null)
 	{
-		
+		if ( $search_string != null )//make sure $search_string is not null
+		{
+			$matches = array();//reset $matches 
+			$the_nodes = $this->get_node(true)->data;//load the nodes and set $the_nodes
+			foreach($the_nodes as $node)//loop through the nodes
+			{
+				if ( preg_match('/' . $search_string . '/Uis', $node['question']) )//check the node's question for the search string
+				{
+					$matches[] = $node;//if a match is found set a new element of the $matches array
+				}
+			}
+			$this->data = $matches;//set the data var
+			return $this;//return the scenario object
+		} else { $this->errors = array('no_string' => 'You did not provide a search string'); return $this; }//error if no search string provided
 	}
+	
+	
+	function delete_scenario($scenario_id = null)
+	{
+		if ( $scenario_id != null )//if $scenario_id is not null
+		{
+			$the_scenario = Mango::factory('Mango_Scenario')->load(1, null, 0, array(), array('_id' => new MongoID($scenario_id)));//load the scenario by _id
+			if ( $the_scenario->loaded() )//check that it's loaded
+			{
+				try
+				{
+					$the_scenario->delete(); //delete the scenario
+				}
+				catch (Mango_Validation_Exception $e)
+				{
+					$this->errors = array('success' => false, 'message' => 'There was a problem deleting this scenario'); // return errors if it does not delete
+					return $this;//return the scenario object
+				}
+				$this->data = array('success' => true, 'message' => 'The scenario was deleted');//set data var with a message that says 
+				return $this;//return the scenario object
+			} else { $this->errors = array('no_scenario_found' => 'We did not find any scenarios to delete'); return $this; }//if it's not loaded pass error messages
+			
+		} else { $this->errors = array('no_scenario_id' => 'You did not provide a scenario_id'); return $this; }//if no scenario id is provided return errors
+	}
+	
+	
+	function delete_nodes()
+	{
+		//this is not written out yet...obviously
+		exit;
+	}
+	
 	
 	public function render($view)
 	{
