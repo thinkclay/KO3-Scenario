@@ -16,16 +16,22 @@ echo html::script("resources/scripts/scenario/admin.js");
 		<div class="view-panel">
 			
 		</div>
-		
-		
 	</div>
 	
 	<div class="right-panel">
+		<ul class="scenario-list">
+			<form action="#" method="post" id="scenario-form">
+				<li><input type="text" name="title" class="scenario-input" /></li>
+				<?php // foreach($data): ?>	
+			</form>
+		</ul>
 	</div>
+	<!--
 	<ul class="control-bar">
-		<li>New Scenario</li>
+		<li class="new-scenario">New Scenario</li>
 		<li>Button 2</li>
 		<li>Button 3</li>
 		<li>Button 4</li>
 	</ul>
+	-->
 </div>
