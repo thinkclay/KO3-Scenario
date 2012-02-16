@@ -27,7 +27,7 @@ class Controller_Scenario_Ajax extends Controller
 			if ( isset($the_scenario->errors) )//check for errors
 			{
 				echo json_encode(array('success' => false, 'errors' => $the_scenario->errors));//report errors
-			} else { echo json_encode(array('success' => true, 'view' => $the_scenario->render('li'))); } //report success	
+			} else { echo json_encode(array('success' => true, 'view' => (string)$the_scenario->render('li'))); } //report success	
 		} else { echo json_encode(array('success' => false, 'errors' => array('No data was provided!'))); }//report no data provided
 	}
 	
@@ -79,6 +79,19 @@ class Controller_Scenario_Ajax extends Controller
 		} else { echo json_encode(array('success' => false, 'errors' => array('No data was provided!'))); }//report no data provided
 	}
 	
+	public function action_buildgrid()
+	{
+		if ( ! empty($_POST) )
+		{
+			$scenario = Scenario::factory();
+			$scenario->data = $_POST['size'];
+			echo json_encode(array('success' => true, 'view' => (string)$scenario->render('buildgrid')));
+		}
+		else 
+		{
+			echo json_encode(array('success' => false, 'errors' => array('Could not build grid.')));	
+		}
+	}
 	
 	public function action_updatescenario()
 	{
