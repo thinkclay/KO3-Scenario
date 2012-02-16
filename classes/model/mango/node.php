@@ -6,9 +6,11 @@ class Model_Mango_Node extends Mango {
 			'type'		=>'string',
 			'required' 	=> true,
 			'not_empty'	=> true,
+			'unique'	=> true,
 		),
 		'answers'		=> array(
 			'type'		=>'array',
+			'not_empty' => true,
 		),
 		'created'		=> array(
 			'type'		=> 'string',
@@ -20,9 +22,12 @@ class Model_Mango_Node extends Mango {
 		),
 		'action' => array(
 			'type'		=> 'string',
+			'not_empty'	=> true,
 		),
 		'creator'	=> array(
 			'type'		=> 'string',
+			'required' 	=> true,
+			'not_empty'	=> true,
 		),
 	);
 

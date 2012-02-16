@@ -11,10 +11,10 @@ class Model_Mango_Scenario extends Mango {
 			'type'		=>'string',
 			'required' 	=> true,
 			'not_empty'	=> true,
+			'unique'	=> true,
 		),
 		'starting_node'		=> array(
 			'type'		=>'string',
-			'required' 	=> true,
 			'not_empty'	=> true,
 		),
 		'created'		=> array(
