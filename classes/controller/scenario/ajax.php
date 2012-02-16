@@ -41,7 +41,7 @@ class Controller_Scenario_Ajax extends Controller
 			if ( isset($the_node->errors) )//check for errors
 			{
 				echo json_encode(array('success' => false, 'errors' => $the_node->errors));//report errors
-			} else { echo json_encode(array('success' => true, 'data' => $the_node->data)); }//report success
+			} else { echo json_encode(array('success' => true, 'view' => $the_node->render('newnode'))); }//report success
 		} else { echo json_encode(array('success' => false, 'errors' => array('No data was provided!'))); }//report no data provided
 	}
 	
@@ -57,7 +57,7 @@ class Controller_Scenario_Ajax extends Controller
 			if ( isset($the_scenarios->errors) )//check for errors
 			{
 				echo json_encode(array('success' => false, 'errors' => $the_scenarios->errors));//report errors
-			} else { echo json_encode(array('success' => true, 'data' => $the_scenarios->data)); }//report success
+			} else { echo json_encode(array('success' => true, 'view' => $the_scenarios->render('scenarios'))); }//report success
 			
 		} else { echo json_encode(array('success' => false, 'errors' => array('No data was provided!'))); }//report no data provided
 	}
@@ -74,7 +74,7 @@ class Controller_Scenario_Ajax extends Controller
 			if ( isset($the_nodes->errors) )//check for errors
 			{
 				echo json_encode(array('success' => false, 'errors' => $the_nodes->errors));//report errors
-			} else { echo json_encode(array('success' => true, 'data' => $the_nodes->data)); }//report success
+			} else { echo json_encode(array('success' => true, 'view' => $the_nodes->render('nodes'))); }//report success
 			
 		} else { echo json_encode(array('success' => false, 'errors' => array('No data was provided!'))); }//report no data provided
 	}
