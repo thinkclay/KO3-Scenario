@@ -20,10 +20,18 @@ echo html::script("resources/scripts/scenario/admin.js");
 	
 	<div class="right-panel">
 		<ul class="scenario-list">
-			<form action="#" method="post" id="scenario-form">
-				<li><input type="text" name="title" class="scenario-input" /></li>
-				<?php // foreach($data): ?>	
-			</form>
+			
+				<?php 
+					foreach($data as $scenario)
+					{
+						echo '<li data-id="'.(string)$scenario['_id'].'">'.$scenario['title'].'</li>';
+					} 
+				?>
+				<li>
+					<form action="#" method="post" id="scenario-form">
+						<input type="text" name="title" class="scenario-input" />
+					</form>
+				</li>
 		</ul>
 	</div>
 	<!--

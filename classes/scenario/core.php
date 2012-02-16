@@ -239,9 +239,9 @@ class Scenario_Core
 	{
 		if ($view == 'admin')
 		{
-			$this->data = $this->get_scenario(true);	
+			$this->get_scenario(true);	
 		}
 		$this->_view = $view;
-		return View::factory('scenario/'.$this->_view)->bind('scenario', $this->data);
+		return View::factory('scenario/'.$this->_view)->bind('data', $this->data);
 	}
 }
