@@ -10,5 +10,13 @@ echo html::script("resources/scripts/scenario/default.js");
 echo html::script("resources/scripts/scenario/admin.js");
 ?> 
 <div id="scenario-admin">
-	TEST
+	<div class="view-panel">
+		
+	</div>
+	<div class="control-bar">
+		
+	</div>
+	<div class="list-view">
+		
+	</div>
 </div>
