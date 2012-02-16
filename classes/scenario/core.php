@@ -251,6 +251,10 @@ class Scenario_Core
 		{
 			$this->get_scenario(true);	
 		}
+		elseif ($view == 'buildgrid')
+		{
+			
+		}
 		$this->_view = $view;
 		return View::factory('scenario/'.$this->_view)->bind('data', $this->data);
 	}
