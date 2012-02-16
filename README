@@ -1,0 +1,4 @@
+The concept is that each node will be an independant document of its own.
+Each node document will have an array field called answers.
+Each one of the answers is associated with another node and
+we are able to create a many to many relationship between documents within a single collection.
