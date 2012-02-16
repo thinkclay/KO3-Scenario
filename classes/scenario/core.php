@@ -52,13 +52,13 @@ class Scenario_Core
 				return $this;//return the scenario object
 			}
 			$the_scenario->create();//create the new scenario in the db
-			$this->data = $new_scenario;//set the data var with the new scenario
+			$this->data = $the_scenario->as_array();//set the data var with the new scenario
 			return $this;//return the scenario object
 		} else { $this->errors = array('no_data' => 'You did not provide any data.'); return $this; }//else return an error message
 	}
 	
 	
-	function get_scenario($all = true, $scenario_id = null)
+	function get_scenario($all = true, $scenario_ids = null)//$scenario_ids MUST BE AN ARRAY!!
 	{
 		if ( $all == true )//if $all is true
 		{
@@ -66,10 +66,15 @@ class Scenario_Core
 			$this->data = $the_scenarios;//set data var to the scenarios array
 			return $this;//return the scenario object
 		}
-		elseif ( $all == false AND $scenario_id != null )//else if you only want one scenario and you have the id
+		elseif ( $all == false AND is_array($scenario_ids) )//else if you only want one scenario and you have the id
 		{
-			$the_scenario = Mango::factory('Mango_Scenario', array('_id' => (string)$scenario_id))->load();//load the single scenario 
-			$this->data = $the_scenario->as_array(false);//set the data var to the single scenario as an array
+			$mongo_ids = array();//empty a new array
+			foreach($scenario_ids as $id)//loop through the array of ids
+			{
+				$mongo_ids[] = new MongoID($id);//convert each of them to a mongoid
+			}
+			$the_scenarios = Mango::factory('Mango_Scenario')->load(false, null, 0, array(), array('_id' => array('$in' => $mongo_ids)));//load the wanted scenarios 
+			$this->data = $the_scenarios->as_array(false);//set the data var to the single scenario as an array
 			return $this;//return the scenario object
 		}
 		else { $this->errors = array('bad_data' => 'The provided data is no good.'); return $this; }//otherwise return error messages
@@ -98,7 +103,7 @@ class Scenario_Core
 	}
 	
 	
-	function get_node($all = true, $node_id = null)
+	function get_node($all = true, $node_ids = null)
 	{
 		if ( $all == true )//if $all is true
 		{
@@ -106,9 +111,14 @@ class Scenario_Core
 			$this->data = $the_nodes;//set data var to the nodes array
 			return $this;//return the scenario object
 		}
-		elseif ( $all == false AND $node_id != null )//else if you only want one node and you have the id
+		elseif ( $all == false AND is_array($node_id) )//else if you only want one node and you have the id
 		{
-			$the_node = Mango::factory('Mango_Node', array('_id' => (string)$node_id))->load()->as_array(false);//load the single node as an array
+			$mongo_ids = array();//empty a new array
+			foreach($node_ids as $id)//loop through the array of ids
+			{
+				$mongo_ids[] = new MongoID($id);//convert each of them to a mongoid
+			}
+			$the_node = Mango::factory('Mango_Node')->load(false, null, 0, array(), array('_id' => array('$in' => $mongo_ids)))->as_array(false);//load the single node as an array
 			$this->data = $the_node;//set the data var to the single node
 			return $this;//return the scenario object
 		}
