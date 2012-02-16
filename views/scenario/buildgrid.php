@@ -6,7 +6,7 @@
 		echo '<tr>';
 		for ($b = 0; $b <= ($data + 1); $b++)
 		{
-			echo '<td data-row="' . $i . '" data-col="' . $b . '" class="empty-cell scenario-cell"></td>';
+			echo '<td data-row="'.$i.'" data-col="'.$b.'" class="empty-cell scenario-cell"></td>';
 		}
 		echo '</tr>'; 
 	}

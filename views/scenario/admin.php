@@ -22,9 +22,9 @@ echo html::script("resources/scripts/scenario/admin.js");
 		<ul class="scenario-list">
 			
 				<?php 
-					foreach($data as $scenario)
+					foreach ($data as $scenario)
 					{
-						echo '<li data-id="'.(string)$scenario['_id'].'">'.$scenario['title'].'</li>';
+						echo '<li data-id="'.(string) $scenario['_id'].'">'.$scenario['title'].'</li>';
 					} 
 				?>
 				<li>
