@@ -28,7 +28,7 @@ class Controller_Scenario_Ajax extends Controller
 			$the_scenario = Scenario::factory()->create_scenario($_POST);//create the new scenario
 			if ($the_scenario->errors === null)//check for errors
 			{
-				echo json_encode(array('success' => true, 'view' => (string)$the_scenario->render('li')));//report success
+				echo json_encode(array('success' => true, 'view' => (string) $the_scenario->render('li')));//report success
 			}
 			else
 			{
@@ -94,106 +94,174 @@ class Controller_Scenario_Ajax extends Controller
 	
 	public function action_getnodes()
 	{
-		if ( ! empty($_POST) )//check for no post data
+		if ( ! empty($_POST))//check for no post data
 		{
 			if ( $_POST['all'] == true )//check if the user wants all of the nodes
-				$the_nodes = Scenario::factory()->get_node(true);//get all the nodes	
+			{
+				$the_nodes = Scenario::factory()->get_node(true);//get all the nodes
+			}	
 			else 
-				$the_nodes = Scenario::factory()->get_node(false, $_POST['nodes']);//the $_POST['nodes'] var MUST BE AN ARRAY!!
-			if ( $the_nodes->errors === null )//check for errors
+			{
+				$the_nodes = Scenario::factory()->get_node(false, $_POST['nodes']);//the $_POST['nodes'] var MUST BE AN ARRAY!!	
+			}
+			if ($the_nodes->errors === null)//check for errors
 			{
 				echo json_encode(array('success' => true, 'view' => $the_nodes->render('nodes')));//report success
-			} else { echo json_encode(array('success' => false, 'errors' => $the_nodes->errors)); }//report core errors
-		} else { echo json_encode(array('success' => false, 'errors' => array('No data was provided!'))); }//report no data provided
+			}
+			else
+			{
+				echo json_encode(array('success' => false, 'errors' => $the_nodes->errors));//report core errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('No data was provided!')));//report no data provided
+		}
 	}
 	
 	
 	public function action_buildgrid()
 	{
-		if ( ! empty($_POST) )//check for empty post
+		if ( ! empty($_POST))//check for empty post
 		{
 			$scenario = Scenario::factory();//load up a scenario object
 			$scenario->data = $_POST['size'];//set the object's data var to the size of the grid you want to build
-			echo json_encode(array('success' => true, 'view' => (string)$scenario->render('buildgrid')));//render the grid and echo it to the view
-		} else { echo json_encode(array('success' => false, 'errors' => array('Could not build grid.'))); }//report no data provided
+			echo json_encode(array('success' => true, 'view' => (string) $scenario->render('buildgrid')));//render the grid and echo it to the view
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('Could not build grid.')));//report no data provided
+		}
 	}
 	
 	
 	public function action_updatescenario()
 	{
-		if ( ! empty($_POST) )//check for empty post 
+		if ( ! empty($_POST))//check for empty post 
 		{
-			if ( isset($_POST['scenario_id']) )//check that a scenario id was sent
+			if (isset($_POST['scenario_id']))//check that a scenario id was sent
 			{
 				$scenario_id = $_POST['scenario_id'];//set $scenario_id to the $_POST['scenario_id']
 				$update_data = array();//reset the $update_data var
-				foreach($_POST as $post_key => $post_value)//run a foreach on the $_POST
+				foreach ($_POST as $post_key => $post_value)//run a foreach on the $_POST
 				{
-					if ( $post_key != 'scenario_id' )//make sure the current post key is not scenario_id
+					if ($post_key != 'scenario_id')//make sure the current post key is not scenario_id
+					{
 						$update_data[$post_key] = $post_value;//create the new $update_data array
+					}	
 				}
 				$scenario = Scenario::factory()->update_scenario($update_data, $scenario_id);//load up the scenario object and run an update on the scenario
-				if ( $scenario->errors === null )
+				if ($scenario->errors === null)
 				{
-					echo json_encode(array('success' => true, 'view' => (string)$scenario->render('updatescenario')));//report success and send over the view
-				} else { echo json_encode(array('success' => false, 'errors' => $node->errors)); }//report core errors
-			} else { echo json_encode(array('success' => false, 'errors' => array('You did not provide a scenario id.'))); }//return errors
-		} else { echo json_encode(array('success' => false, 'errors' => array('You did not provide any update data.'))); }//return errors
+					echo json_encode(array('success' => true, 'view' => (string) $scenario->render('updatescenario')));//report success and send over the view
+				}
+				else
+				{
+					echo json_encode(array('success' => false, 'errors' => $node->errors));//report core errors
+				}
+			}
+			else
+			{
+				echo json_encode(array('success' => false, 'errors' => array('You did not provide a scenario id.'))); //return errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('You did not provide any update data.')));//return errors
+		}
 	}
 	
 	
 	public function action_updatenode()
 	{
-		if ( ! empty($_POST) )//check for empty post 
+		if ( ! empty($_POST))//check for empty post 
 		{
-			if ( isset($_POST['node_id']) )//check that a node id was sent
+			if (isset($_POST['node_id']))//check that a node id was sent
 			{
 				$node_id = $_POST['node_id'];//set $node_id to the $_POST['node_id']
 				$update_data = array();//reset the $update_data var
-				foreach($_POST as $post_key => $post_value)//run a foreach on the $_POST
+				foreach ($_POST as $post_key => $post_value)//run a foreach on the $_POST
 				{
-					if ( $post_key != 'node_id' )//make sure the current post key is not node_id
+					if ($post_key != 'node_id')//make sure the current post key is not node_id
+					{
 						$update_data[$post_key] = $post_value;//create the new $update_data array
+					}
 				}
 				$node = Scenario::factory()->update_node($update_data, $node_id);//load up the scenario object and run an update on the node
-				if ( $node->errors === null)
+				if ($node->errors === null)
 				{
-					echo json_encode(array('success' => true, 'view' => (string)$node->render('updatenode')));//report success and send over the view
-				} else { echo json_encode(array('success' => false, 'errors' => $node->errors)); }//report core errors
-			} else { echo json_encode(array('success' => false, 'errors' => array('You did not provide a node id.'))); }//return errors
-		} else { echo json_encode(array('success' => false, 'errors' => array('You did not provide any update data.'))); }//return errors
+					echo json_encode(array('success' => true, 'view' => (string) $node->render('updatenode')));//report success and send over the view
+				}
+				else
+				{
+					echo json_encode(array('success' => false, 'errors' => $node->errors));//report core errors
+				}
+			}
+			else
+			{
+				echo json_encode(array('success' => false, 'errors' => array('You did not provide a node id.')));//return errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('You did not provide any update data.')));//return errors
+		}
 	}
 	
 	
 	public function action_searchscenarios()
 	{
-		if ( ! empty($_POST) )//check for empty post
+		if ( ! empty($_POST))//check for empty post
 		{
-			if ( isset($_POST['search_string']) )//make sure that there is a search string
+			if (isset($_POST['search_string']))//make sure that there is a search string
 			{
 				$scenarios = Scenario::factory()->search_scenarios($_POST['search_string']);//load the scenario object and call search_scenarios()
-				if ( $scenarios->errors === null )//make sure there were no errors
+				if ($scenarios->errors === null)//make sure there were no errors
 				{
-					echo json_encode(array('success' => true, 'view' => (string)$scenarios->render('searchscenarios')));//report success and send over the view
-				} else { echo json_encode(array('success' => false, 'errors' => $scenarios->errors)); }//return core errors if there were any
-			} else { echo json_encode(array('success' => false, 'errors' => array('No search string was sent.'))); }//return errors
-		} else { echo json_encode(array('success' => false, 'errors' => array('You did not provide any search data.'))); }//return errors
+					echo json_encode(array('success' => true, 'view' => (string) $scenarios->render('searchscenarios')));//report success and send over the view
+				}
+				else
+				{
+					echo json_encode(array('success' => false, 'errors' => $scenarios->errors));//return core errors if there were any
+				}
+			}
+			else
+			{
+				echo json_encode(array('success' => false, 'errors' => array('No search string was sent.')));//return errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('You did not provide any search data.')));//return errors
+		}
 	}
 	
 	
 	public function action_searchnodes()
 	{
-		if ( ! empty($_POST) )//check for empty post
+		if ( ! empty($_POST))//check for empty post
 		{
-			if ( isset($_POST['search_string']) )//make sure that there is a search string
+			if (isset($_POST['search_string']))//make sure that there is a search string
 			{
 				$nodes = Scenario::factory()->search_nodes($_POST['search_string']);//load the scenario object and call search_nodes()
-				if ( $nodes->errors === null )//make sure there were no errors
+				if ($nodes->errors === null)//make sure there were no errors
 				{
-					echo json_encode(array('success' => true, 'view' => (string)$nodes->render('searchnodes')));//report success and send over the view
-				} else { echo json_encode(array('success' => false, 'errors' => $nodes->errors)); }//return core errors if there were any
-			} else { echo json_encode(array('success' => false, 'errors' => array('No search string was sent.'))); }//return errors
-		} else { echo json_encode(array('success' => false, 'errors' => array('You did not provide any search data.'))); }//return errors
+					echo json_encode(array('success' => true, 'view' => (string) $nodes->render('searchnodes')));//report success and send over the view
+				}
+				else
+				{
+					echo json_encode(array('success' => false, 'errors' => $nodes->errors));//return core errors if there were any
+				}
+			}
+			else
+			{
+				echo json_encode(array('success' => false, 'errors' => array('No search string was sent.')));//return errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('You did not provide any search data.')));//return errors
+		}
 	}
 	
 	
@@ -208,9 +276,21 @@ class Controller_Scenario_Ajax extends Controller
 				if ( $scenario->errors === null )//check for core errors
 				{
 					echo json_encode(array('success' => true, 'view' => (string)$scenario->render('deletescenario')));//report success and send over the view
-				} else { echo json_encode(array('success' => false, 'errors' => $scenario->errors)); }//return core errors if any
-			} else { echo json_encode(array('success' => false, 'errors' => array('No scenario_id was sent.'))); }//return errors
-		} else { echo json_encode(array('success' => false, 'errors' => array('You did not provide any post data.'))); }//return errors
+				}
+				else
+				{
+					echo json_encode(array('success' => false, 'errors' => $scenario->errors));//return core errors if any
+				}
+			}
+			else
+			{
+				echo json_encode(array('success' => false, 'errors' => array('No scenario_id was sent.')));//return errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('You did not provide any post data.')));//return errors
+		}
 	}
 	
 	
