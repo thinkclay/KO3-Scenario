@@ -78,7 +78,7 @@ class Controller_Scenario_Ajax extends Controller
 			}
 			if ($the_scenarios->errors === null)//check for errors
 			{
-				echo json_encode(array('success' => true, 'view' => $the_scenarios->render('scenarios')));//report errors
+				echo json_encode(array('success' => true, 'view' => (string) $the_scenarios->render('scenarios')));//report errors
 			}
 			else
 			{

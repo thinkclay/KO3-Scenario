@@ -29,8 +29,9 @@ echo html::script("resources/scripts/scenario/admin.js");
 				?>
 				<li>
 					<form action="#" method="post" id="scenario-form">
-						<input type="text" name="title" class="scenario-input" />
+						<input id="scenario-input" type="text" name="title" class="scenario-input" />
 					</form>
+					<div class="search-results"></div>
 				</li>
 		</ul>
 	</div>
