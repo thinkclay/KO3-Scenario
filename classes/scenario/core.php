@@ -119,13 +119,20 @@ class Scenario_Core
 	 * Creates a new node in the DB
 	 * 
 	 * This method will create a new node in the database and set $this->data to that newly created node as an array
+	 * If the $new_node data contains a scenario_id field then it will also update the scenario linking the new node to it.
 	 * @param   array   new_node the data used to create the new node
 	 * @return  object
 	 */
 	function create_node($new_node)
 	{
+		$scenario_id = null;
 		if ( ! empty($new_node))//check that the $new_node is not empty
 		{
+			if (isset($new_node['scenario_id']))
+			{
+				$scenario_id = $new_node['scenario_id'];
+				unset($new_node['scenario_id']);
+			}
 			$new_node['created'] = time();//get the current timestamp
 			$the_node = Mango::factory('Mango_Node', $new_node); //load up a new mango object with the passed in data
 			try
@@ -138,6 +145,13 @@ class Scenario_Core
 				return $this;//return the scenario object
 			}
 			$the_node->create();//create the new node in the db
+			if ($scenario_id !== null)
+			{
+				$the_node->reload();
+				$update_data = array('starting_node' => $the_node->_id);
+				$this->update_scenario($update_data, $scenario_id);
+			}
+			
 			$this->data = $new_node;//set the data var with the new node
 			return $this;//return the scenario object
 		} 

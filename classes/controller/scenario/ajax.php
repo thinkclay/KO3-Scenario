@@ -50,7 +50,7 @@ class Controller_Scenario_Ajax extends Controller
 			$the_node = Scenario::factory()->create_node($_POST);//create the node
 			if ($the_node->errors === null)//check for errors
 			{
-				echo json_encode(array('success' => true, 'view' => $the_node->render('newnode')));//report success
+				echo json_encode(array('success' => true, 'view' => (string) $the_node->render('newnode')));//report success
 			}
 			else
 			{

@@ -29,6 +29,9 @@ class Model_Mango_Node extends Mango {
 			'required' 	=> true,
 			'not_empty'	=> true,
 		),
+		'media' => array(
+			'type' => 'string'
+		)
 	);
 
 	protected $_db = 'localhost'; //don't use default db config
