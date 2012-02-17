@@ -1,5 +1,126 @@
 #scenario-admin {
 	width: 90%;
-	border: solid 1px #ccc;
-	height: 500px;
+	background-color: #ccc;
+	height: 90%;
+	padding: 5px;
+	position: relative;
+}
+/*
+ * left side view panel styles
+ */
+.left-panel {
+	height: 100%;
+	width: 80%;
+	background-color: #F0F0F0;
+	overflow: scroll;
+	float: left;
+}
+.view-panel { /*  this is the draggable panel which contains node and decision blocks */
+	position: relative;
+}
+table.scenario-grid {
+	width: 100%;
+}
+td.scenario-cell {
+	min-width: 18px;
+	min-height: 16px;
+	height: 16px;
+	width: 18px;
+	margin: 0px;
+	border: solid 1px #E0E2FF;
+	padding: 0px;
+	background-color: #FFF;
+}
+
+/*  Question Node Styles */
+
+div.node-div {
+	position: absolute;
+	background-color: #C49090;
+}
+div.node-arrow {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	opacity: 0.5;
+}
+div.node-arrow:hover {
+	opacity: 100;
+}
+div.node-left-arrow {
+	background: url('/resources/images/scenario/left-arrow.png');
+}
+div.node-bottom-left-arrow {
+	background: url('/resources/images/scenario/bottom-left-arrow.png');
+}
+div.node-bottom-arrow {
+	background: url('/resources/images/scenario/bottom-arrow.png');
+}
+div.node-bottom-right-arrow {
+	background: url('/resources/images/scenario/bottom-right-arrow.png');
+}
+div.node-right-arrow {
+	background: url('/resources/images/scenario/right-arrow.png');
+}
+.node-textarea {
+	background-color: #C49090;
+	resize: none;
+	overflow: hidden;
+	border: 0;
+}
+
+/*
+ul.control-bar {
+	margin:0px;
+	padding:0px;
+	height: 10%;    
+    width: 80%; 
+}
+ul.control-bar li {	
+	list-style-type: none;
+	display: inline;
+	margin-left: 5px;
+	background-color: #ccc;
+	font-size: 1em;
+	position: relative;
+    top: -75%;
+    cursor: pointer;
+}
+
+*/
+
+
+/*
+ * Right side scenario list styles
+ */
+.right-panel {
+	width: 19%;
+	margin-left: 1%;
+	height: 100%;
+	float: right;
+	background-color: #F0F0F0; 
+	overflow: scroll;
+}
+form#scenario-form {
+	margin: 0px;
+	padding: 0px;
+}
+span.error {
+	color: #FF0000;
+	font-size: .75em;
+}
+ul.scenario-list {
+	margin: 0px;
+	padding: 0px;
+}
+ul.scenario-list li {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+	width: 100%;
+	border-bottom:solid 1px #CCC; 
+	cursor: pointer;
+}
+input.scenario-input {
+	width: 100%;
 }
