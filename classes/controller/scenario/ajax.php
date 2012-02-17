@@ -22,45 +22,73 @@ class Controller_Scenario_Ajax extends Controller
 	
 	public function action_newscenario()
 	{
-		if ( ! empty($_POST) )//check for no post data
+		if ( ! empty($_POST))//check for no post data
 		{
 			$_POST['creator'] = 'system';//this will be changed to reflect a log in system
 			$the_scenario = Scenario::factory()->create_scenario($_POST);//create the new scenario
-			if ( $the_scenario->errors === null )//check for errors
+			if ($the_scenario->errors === null)//check for errors
 			{
 				echo json_encode(array('success' => true, 'view' => (string)$the_scenario->render('li')));//report success
-			} else { echo json_encode(array('success' => false, 'errors' => $the_scenario->errors)); } //report errors	
-		} else { echo json_encode(array('success' => false, 'errors' => array('No data was provided!'))); }//report no data provided
+			}
+			else
+			{
+				echo json_encode(array('success' => false, 'errors' => $the_scenario->errors));//report errors
+			}	
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('No data was provided!')));//report no data provided
+		}
 	}
 	
 	
 	public function action_newnode()
 	{
-		if ( ! empty($_POST) )//check for no post data
+		if ( ! empty($_POST))//check for no post data
 		{
 			$_POST['creator'] = 'system';//this will be changed to reflect a log in system
 			$the_node = Scenario::factory()->create_node($_POST);//create the node
-			if ( $the_node->errors === null )//check for errors
+			if ($the_node->errors === null)//check for errors
 			{
 				echo json_encode(array('success' => true, 'view' => $the_node->render('newnode')));//report success
-			} else { echo json_encode(array('success' => false, 'errors' => $the_node->errors)); }//report errors
-		} else { echo json_encode(array('success' => false, 'errors' => array('No data was provided!'))); }//report no data provided
+			}
+			else
+			{
+				echo json_encode(array('success' => false, 'errors' => $the_node->errors));//report errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('No data was provided!')));//report no data provided
+		}
 	}
 	
 	
 	public function action_getscenarios()
 	{
-		if ( ! empty($_POST) )//check for no post data
+		if ( ! empty($_POST))//check for no post data
 		{
-			if ( $_POST['all'] == true )
-				$the_scenarios = Scenario::factory()->get_scenario(true);//get all the scenarios	
-			else 
+			if ($_POST['all'] === true)
+			{
+				$the_scenarios = Scenario::factory()->get_scenario(true);//get all the scenarios
+			}	
+			else
+			{
 				$the_scenarios = Scenario::factory()->get_scenario(false, $_POST['scenarios']);//the $_POST['scenarios'] var MUST BE AN ARRAY!!
-			if ( $the_scenarios->errors === null )//check for errors
+			}
+			if ($the_scenarios->errors === null)//check for errors
 			{
 				echo json_encode(array('success' => true, 'view' => $the_scenarios->render('scenarios')));//report errors
-			} else { echo json_encode(array('success' => false, 'errors' => $the_scenarios->errors)); }//report core errors
-		} else { echo json_encode(array('success' => false, 'errors' => array('No data was provided!'))); }//report no data provided
+			}
+			else
+			{
+				echo json_encode(array('success' => false, 'errors' => $the_scenarios->errors));//report core errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('No data was provided!')));//report no data provided
+		}
 	}
 	
 	
