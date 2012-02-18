@@ -56,7 +56,7 @@ class Scenario_Core
 	 * @param   array new_scenario the data used to create the new scenario
 	 * @return  object
 	 */
-	function create_scenario($new_scenario)
+	public function create_scenario($new_scenario)
 	{
 		if ( ! empty($new_scenario))//check that the $new_scenario is not empty
 		{
@@ -77,7 +77,140 @@ class Scenario_Core
 		} 
 		else 
 		{
-			 $this->errors = array('no_data' => 'You did not provide any data.'); return $this; //else return an error message
+			 $this->errors = array('no_data' => 'You did not provide any data.'); //else return an error message
+			 return $this;//return the scenario object
+		}
+	}
+	
+	/**
+	 * Creates an answer in a specific node
+	 * 
+	 * This method will create a new answer in the node that you specify
+	 * @param 	string new_answer holds theanswer string that you will be using to create
+	 * @param   string node_id holds the mongo id of the node that you want to create in
+	 * @return  object
+	 */
+	public function create_answer($new_answer, $node_id)
+	{
+		if ( ! empty($new_answer))//check that $new_answer is not empty
+		{
+			if ( ! empty($node_id))//check for no node id
+			{
+				$the_node_id = array($node_id);//make the node id an array for get_node to work properly
+				$this->get_node(false, $the_node_id);//get the original node loaded
+				if (isset($this->data[0]['answers']))//check if it has previous answers
+				{
+					$previous_node_array = $this->data[0];//set the previous node array with the data that is currently in $this->data
+					$answer_counter = 0;//reset answer counter
+					foreach ($previous_node_array['answers'] as $answer)//loop through answers
+					{
+						$answer_counter++;//count the answers so that we can dynamically create a unique 'question' for the node we are about to create
+					}
+					$this->create_node(array('question' => $node_id.' Choice '.$answer_counter, 'creator' => 'system'));//create the new node
+					$newly_created_node_id = $this->data['_id'];//set the $newly_created_node_id with the data that was just set with create_node()
+					unset($previous_node_array['_id']);//unsite the _id field of the previous array ...it is not needed and will throw the mango model off
+					$previous_node_array['answers'][$newly_created_node_id] = $new_answer;//set the next element in the previous nodes answer array
+					$this->update_node($previous_node_array, $node_id)->get_node(false, array($newly_created_node_id));//update the previous node and then call get_node so that the data you return will be the newly created node
+					return $this;//return the scenario object
+				}
+				else //if no previous answers
+				{
+					$previous_node_array = $this->data[0];//set the $previous_node_array var with what is currently in $this->data
+					$this->create_node(array('question' => $node_id.' Choice 0', 'creator' => 'system'));//create the new node
+					$newly_created_node_id = $this->data['_id'];//set the newly_created_node_id var with what was set in the data array when we called get_node
+					unset($previous_node_array['_id']);//unset the _id field of the previous array ...it is not needed and will throw off the mango model
+					$previous_node_array['answers'] = array($newly_created_node_id => $new_answer);//create a new array element with key 'answers' in the $previous_node_array and then set the new answer to that element
+					$this->update_node($previous_node_array, $node_id)->get_node(false, array($newly_created_node_id));//update the previous node and call get_node to set the newly created node as $this->data
+					return $this;//return the scenario object
+				}
+			}
+			else
+			{
+				$this->errors = array('no_node_id' => 'You did not provide a node id.');//return errors
+				return $this; //return scenario object
+			}
+		}
+		else 
+		{
+			$this->errors = array('no_data' => 'You did not provide any data.'); //else return an error message
+			return $this; //return the scenario object
+		}
+	}
+	
+	/**
+	 * Updates a specific answer from a specific node
+	 * 
+	 * This method will grab a specific node out of the db and update the selected answer in that node
+	 * @param 	string new_answer holds the updated answer string that you will be using to update
+	 * @param   string node_id holds the mongo id of the node that you want to update in
+	 * @param	string answer_key_to_update holds the key of the answer you want to update
+	 * @return  object
+	 */
+	public function update_answer($new_answer = null, $node_id = null, $answer_key_to_update = null)
+	{
+		if ($new_answer !== null)//make sure $new_answer is set
+		{
+			if ($node_id !== null)//make sure $node_id is set
+			{
+				if ($answer_key_to_update !== null)//make sure $answer_key_to_update is set
+				{
+					$this->get_node(false, array($node_id));//get the node
+					$answers = $this->data[0]['answers'];//set answers to the data that was provided with get_node()
+					$updated_answers['answers'] = $answers;//set $updated_answers
+					$updated_answers['answers'][$answer_key_to_update] = $new_answer;//set the updated data
+					$this->update_node($updated_answers, $node_id);//update the node
+					return $this;//return the scenario object
+				}
+				else
+				{
+					$this->errors = array('no_data' => 'You did not provide an answer key to update.'); //else return an error message
+					return $this; //return the scenario object
+				}
+			}
+			else
+			{
+				$this->errors = array('no_data' => 'You did not provide a node id.'); //else return an error message
+				return $this; //return the scenario object
+			}
+		}
+		else 
+		{
+			$this->errors = array('no_data' => 'You did not provide a new answer string.'); //else return an error message
+			return $this; //return the scenario object
+		}
+	}
+	
+	/**
+	 * Deletes a specific answer from a specific node
+	 * 
+	 * This method will grab a specific node out of the db and delete the selected answer out of that db
+	 * @param   string node_id holds the mongo id of the node that you want to delete from
+	 * @param	string answer_key_to_delete holds the key of the answer that you want to delete
+	 * @return  object
+	 */
+	public function delete_answer($node_id = null, $answer_key_to_delete = null)
+	{
+		if ($node_id !== null)//check for empty node id
+		{
+			if ($answer_key_to_delete !== null)//check for empty answer key
+			{
+				$this->get_node(false, array($node_id));//get the node
+				$answers = $this->data[0]['answers'];//set the $answers var
+				$updated_answers['answers'] = $answers;//set $updated_answers
+				unset($updated_answers['answers'][$answer_key_to_delete]);//unset the data you want deleted
+				$this->update_node($updated_answers, $node_id);//update the node
+				return $this;//return the scenario object
+			}
+			else 
+			{
+				$this->errors = array('no_data' => 'You did not provide a answer key.'); //else return an error message
+				return $this; //return the scenario object
+			}
+		}
+		else
+		{
+			$this->errors = array('no_data' => 'You did not provide a node id.'); //else return an error message
+			return $this; //return the scenario object
 		}
 	}
 	
@@ -89,7 +222,7 @@ class Scenario_Core
 	 * @param	array scenario_ids holds a set of mongoIds to query the db for
 	 * @return  object
 	 */
-	function get_scenario($all = true, $scenario_ids = null)//$scenario_ids MUST BE AN ARRAY!!
+	public function get_scenario($all = true, $scenario_ids = null)//$scenario_ids MUST BE AN ARRAY!!
 	{
 		if ($all == true)//if $all is true
 		{
@@ -123,7 +256,7 @@ class Scenario_Core
 	 * @param   array   new_node the data used to create the new node
 	 * @return  object
 	 */
-	function create_node($new_node)
+	public function create_node($new_node)
 	{
 		$scenario_id = null;
 		if ( ! empty($new_node))//check that the $new_node is not empty
@@ -145,13 +278,16 @@ class Scenario_Core
 				return $this;//return the scenario object
 			}
 			$the_node->create();//create the new node in the db
+			$new_node['_id'] = (string) $the_node->_id;//make sure the array holds the id of the newly created node as well
 			if ($scenario_id !== null)
 			{
 				$the_node->reload();
 				$update_data = array('starting_node' => $the_node->_id);
 				$this->update_scenario($update_data, $scenario_id);
 			}
-			
+
+
+
 			$this->data = $new_node;//set the data var with the new node
 			return $this;//return the scenario object
 		} 
@@ -170,7 +306,7 @@ class Scenario_Core
 	 * @param	array node_ids holds a set of mongoIds to query the db for
 	 * @return  object
 	 */
-	function get_node($all = true, $node_ids = null)
+	public function get_node($all = true, $node_ids = null)
 	{
 		if ($all == true)//if $all is true
 		{
@@ -178,7 +314,7 @@ class Scenario_Core
 			$this->data = $the_nodes;//set data var to the nodes array
 			return $this;//return the scenario object
 		}
-		elseif ($all == false AND is_array($node_id))//else if you only want one node and you have the id
+		elseif ($all == false AND is_array($node_ids))//else if you only want one node and you have the id
 		{
 			$mongo_ids = array();//empty a new array
 			foreach ($node_ids as $id)//loop through the array of ids
@@ -204,7 +340,7 @@ class Scenario_Core
 	 * @param	string node_id holds the mongoId for the node that will be updated
 	 * @return  object
 	 */
-	function update_node($update_data = null, $node_id = null)
+	public function update_node($update_data = null, $node_id = null)
 	{
 		if ($node_id != null AND $update_data != null)
 		{
@@ -241,7 +377,7 @@ class Scenario_Core
 	 * @param	string scenario_id holds the mongoId for the scenario that will be updated
 	 * @return  object
 	 */
-	function update_scenario($update_data = null, $scenario_id = null)
+	public function update_scenario($update_data = null, $scenario_id = null)
 	{
 		if ($scenario_id != null AND $update_data != null)//make sure both $scenario_id and $update_data are set
 		{
@@ -277,7 +413,7 @@ class Scenario_Core
 	 * @param	string search_string holds the search string to be used
 	 * @return  object
 	 */
-	function search_scenarios($search_string = null)
+	public function search_scenarios($search_string = null)
 	{
 		if ($search_string != null)//make sure $search_string is not null
 		{
@@ -307,7 +443,7 @@ class Scenario_Core
 	 * @param	string search_string holds the search string to be used
 	 * @return  object
 	 */
-	function search_nodes($search_string = null)
+	public function search_nodes($search_string = null)
 	{
 		if ($search_string != null)//make sure $search_string is not null
 		{
@@ -338,7 +474,7 @@ class Scenario_Core
 	 * @param	string scenario_id holds the mongoId of the scenario to be deleted
 	 * @return  object
 	 */
-	function delete_scenario($scenario_id = null)
+	public function delete_scenario($scenario_id = null)
 	{
 		if ($scenario_id != null)//if $scenario_id is not null
 		{
@@ -362,7 +498,6 @@ class Scenario_Core
 				$this->errors = array('no_scenario_found' => 'We did not find any scenarios to delete');//set error messages
 				return $this;//return the object
 			}
-			
 		}
 		else
 		{
@@ -372,7 +507,7 @@ class Scenario_Core
 	}
 	
 	
-	function delete_nodes()
+	public function delete_nodes()
 	{
 		//this is not written out yet...obviously
 		exit;

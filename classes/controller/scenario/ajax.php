@@ -275,7 +275,7 @@ class Controller_Scenario_Ajax extends Controller
 				$scenario = Scenario::factory()->delete_scenario($scenario_id);//load the scenario object and delete the scenario
 				if ( $scenario->errors === null )//check for core errors
 				{
-					echo json_encode(array('success' => true, 'view' => (string)$scenario->render('deletescenario')));//report success and send over the view
+					echo json_encode(array('success' => true, 'view' => (string) $scenario->render('deletescenario')));//report success and send over the view
 				}
 				else
 				{
@@ -285,6 +285,118 @@ class Controller_Scenario_Ajax extends Controller
 			else
 			{
 				echo json_encode(array('success' => false, 'errors' => array('No scenario_id was sent.')));//return errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('You did not provide any post data.')));//return errors
+		}
+	}
+	
+	
+	public function action_newanswer()
+	{
+		if ( ! empty($_POST))//check for empty post
+		{
+			if ( ! isset($_POST['node_id']))//check for no node id
+			{
+				if ( ! isset($_POST['answer_key']))//check for no answer key
+				{
+					$new_node = Scenario::factory()->create_answer($_POST['node_id'], $_POST['answer_key']);//create answer
+					if ( $new_node->errors === null )//check for core errors
+					{
+						echo json_encode(array('success' => true, 'view' => (string) $new_node->render('newnode')));//report success and send over the view
+					}
+					else
+					{
+						echo json_encode(array('success' => false, 'errors' => $new_node->errors));//return core errors if any
+					}
+				}
+				else
+				{
+					echo json_encode(array('success' => false, 'errors' => array('No answer_key was sent.')));//return core errors if any
+				}
+			}
+			else 
+			{
+				echo json_encode(array('success' => false, 'errors' => array('No node_id was sent.')));//return errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('You did not provide any post data.')));//return errors
+		}
+	}
+	
+	
+	public function action_updateanswer()
+	{
+		if ( ! empty($_POST))//check for no post
+		{
+			if ( isset($_POST['new_answer']))//check for no new answer
+			{
+				if ( isset($_POST['node_id']))//check for no node id
+				{
+					if ( isset($_POST['answer_key_to_update']))//check for answer key to update
+					{
+						$updated_node = Scenario::factory()->update_answer($_POST['new_answer'], $_POST['node_id'], $_POST['answer_key_to_update']);//update the answer
+						if ( $updated_node->errors === null )//check for core errors
+						{
+							echo json_encode(array('success' => true, 'view' => (string) $updated_node->render('updatednode')));//report success and send over the view
+						}
+						else
+						{
+							echo json_encode(array('success' => false, 'errors' => $updated_node->errors));//return core errors if any
+						}
+					}
+					else 
+					{
+						echo json_encode(array('success' => false, 'errors' => array('No node id was sent.')));//return errors
+					}
+				}
+				else 
+				{
+					echo json_encode(array('success' => false, 'errors' => array('No node id was sent.')));//return errors
+				}
+			}
+			else 
+			{
+				echo json_encode(array('success' => false, 'errors' => array('No new answer was sent.')));//return errors
+			}
+		}
+		else
+		{
+			echo json_encode(array('success' => false, 'errors' => array('You did not provide any post data.')));//return errors
+		}
+	}
+	
+	
+	public function aciton_deleteanswer()
+	{
+		if ( ! empty($_POST))//check for no post data
+		{
+			if ( isset($_POST['node_id']))//check for no node id
+			{
+				if ( isset($_POST['answer_key_to_delete']))//check for no answer key to delete
+				{
+					$updated_node = Scenario::factory()->delete_answer($_POST['node_id'], $_POST['answer_key_to_delete']);//delete the answer
+					if ( $updated_node->errors === null )//check for core errors
+					{
+						echo json_encode(array('success' => true, 'view' => (string) $updated_node->render('updatednode')));//report success and send over the view
+					}
+					else
+					{
+						echo json_encode(array('success' => false, 'errors' => $updated_node->errors));//return core errors if any
+					}
+				}
+				else 
+				{
+					echo json_encode(array('success' => false, 'errors' => array('No node id was sent.')));//return errors
+				}
+			}
+			else 
+			{
+				echo json_encode(array('success' => false, 'errors' => array('No new answer was sent.')));//return errors
 			}
 		}
 		else
