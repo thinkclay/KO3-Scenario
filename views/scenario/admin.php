@@ -6,11 +6,21 @@
  */
 echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>';
 echo '<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>';
-echo html::style("resources/styles/scenario/default.css"); 
-echo html::style("resources/styles/scenario/admin.css");
-echo html::script("resources/scripts/scenario/default.js"); 
-echo html::script("resources/scripts/scenario/admin.js");
-?> 
+echo html::style("resources/scenario/styles/default.css"); 
+echo html::style("resources/scenario/styles/admin.css");
+echo html::script("resources/scenario/scripts/default.js"); 
+echo html::script("resources/scenario/scripts/admin.js");
+
+
+/* Wireit dependancies */
+echo html::script('resources/scenario/wireit/lib/yui/utilities/utilities.js');
+echo html::script('resources/scenario/wireit/lib/yui/yuiloader/yuiloader-min.js');
+//echo html::script('resources/scenario/wireit/src/loader.js');
+
+echo html::script('resources/scenario/wireit/wireit-min.js');
+echo html::style("resources/scenario/wireit/css/WireIt.css");
+
+?>  
 <div id="scenario-admin">
 	<div class="left-panel">
 		<div class="view-panel">
