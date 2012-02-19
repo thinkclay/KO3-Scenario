@@ -34,7 +34,8 @@ class Model_Mango_Scenario extends Mango {
 		),
 	);
 
-	protected $_db = 'localhost'; //don't use default db config
+	protected $_db = 'default'; //don't use default db config
+	
 	
 	public function check_timestamp($val) 
     {
