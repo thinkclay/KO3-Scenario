@@ -16,10 +16,12 @@
 	float: left;
 }
 .view-panel { /*  this is the draggable panel which contains node and decision blocks */
+	background-color:white; 
+	background-image:url('/resources/scenario/plumb/img/dynamicAnchorBg.jpg'); 
+	font-family:Helvetica;
+	width: 5000px;
+	height: 5000px;
 	position: relative;
-}
-table.scenario-grid {
-	width: 100%;
 }
 td.scenario-cell {
 	min-width: 18px;
@@ -34,39 +36,32 @@ td.scenario-cell {
 
 /*  Question Node Styles */
 
-div.node-div {
-	position: absolute;
+div.question-div {
 	background-color: #C49090;
+	width: 100px;
+	height: 100px;
+	position: relative;
 }
-div.node-arrow {
-	width: 20px;
-	height: 20px;
-	position: absolute;
-	opacity: 0.5;
-}
-div.node-arrow:hover {
-	opacity: 100;
-}
-div.node-left-arrow {
-	background: url('/resources/images/scenario/left-arrow.png');
-}
-div.node-bottom-left-arrow {
-	background: url('/resources/images/scenario/bottom-left-arrow.png');
-}
-div.node-bottom-arrow {
-	background: url('/resources/images/scenario/bottom-arrow.png');
-}
-div.node-bottom-right-arrow {
-	background: url('/resources/images/scenario/bottom-right-arrow.png');
-}
-div.node-right-arrow {
-	background: url('/resources/images/scenario/right-arrow.png');
-}
-.node-textarea {
-	background-color: #C49090;
+
+.question-textarea {
+	background-color: #F0FCF0;
 	resize: none;
 	overflow: hidden;
 	border: 0;
+	width: 80%;
+	height: 80%;
+	margin-top: 10%;
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-bottom: 10%;
+}
+
+/* Answer Node Syltes */
+div.answer-div {
+	width: 50px;
+	height: 50px;
+	background-color: #346789;
+	position: relative;
 }
 
 /*

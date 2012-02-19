@@ -4,21 +4,34 @@
  * Move the .css and .js files to the root resources directory.
  * Change names to match your specific naming conventions and adjust paths accordingly.
  */
+
+/* jQuery & jQuery UI*/
 echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>';
 echo '<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>';
+ 
+// support lib for bezier stuff 
+echo '<script type="text/javascript" src="/resources/scenario/plumb/js/lib/jsBezier-0.3-min.js"></script>' . "\r\n";
+// main jsplumb engine
+echo '<script type="text/javascript" src="/resources/scenario/plumb/js/jsPlumb-1.3.6-RC1.js"></script>' . "\r\n";
+// connectors, endpoint and overlays
+echo '<script type="text/javascript" src="/resources/scenario/plumb/js/jsPlumb-defaults-1.3.6-RC1.js"></script>' . "\r\n";
+// state machine connectors
+echo '<script type="text/javascript" src="/resources/scenario/plumb/js/jsPlumb-connectors-statemachine-1.3.6-RC1.js"></script>' . "\r\n";
+// SVG renderer
+echo '<script type="text/javascript" src="/resources/scenario/plumb/js/jsPlumb-renderers-svg-1.3.6-RC1.js"></script>' . "\r\n";
+// canvas renderer
+echo '<script type="text/javascript" src="/resources/scenario/plumb/js/jsPlumb-renderers-canvas-1.3.6-RC1.js"></script>' . "\r\n";
+// vml renderer
+echo '<script type="text/javascript" src="/resources/scenario/plumb/js/jsPlumb-renderers-vml-1.3.6-RC1.js"></script>' . "\r\n";
+// jquery jsPlumb adapter
+echo '<script type="text/javascript" src="/resources/scenario/plumb/js/jquery.jsPlumb-1.3.6-RC1.js"></script>' . "\r\n";
+
 echo html::style("resources/scenario/styles/default.css"); 
 echo html::style("resources/scenario/styles/admin.css");
 echo html::script("resources/scenario/scripts/default.js"); 
 echo html::script("resources/scenario/scripts/admin.js");
 
 
-/* Wireit dependancies */
-echo html::script('resources/scenario/wireit/lib/yui/utilities/utilities.js');
-echo html::script('resources/scenario/wireit/lib/yui/yuiloader/yuiloader-min.js');
-//echo html::script('resources/scenario/wireit/src/loader.js');
-
-echo html::script('resources/scenario/wireit/wireit-min.js');
-echo html::style("resources/scenario/wireit/css/WireIt.css");
 
 ?>  
 <div id="scenario-admin">

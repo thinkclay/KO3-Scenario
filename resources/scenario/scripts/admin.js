@@ -1,45 +1,10 @@
-
-gridSize = [100,100]; // rows first then columns
-nodeDefaultSize = [5,5]; // this is how many cells the default nodeDiv will occupy (ie. 5 x 5)
-
-var buildGrid = function(){
-	//var post = 'size='+size;
-	var html = '<table cellspacing="0" cellpadding="0">';
-	for (i=0;i<=gridSize[0];i=i+1)
-	{
-		html = html + '<tr>';
-		for (b=0;b<=gridSize[1];b=b+1)
-		{
-			html = html + '<td width="20" height="20" data-row="'+i+'" data-col="'+b+'" class="empty-cell scenario-cell">&nbsp;</td>';
-		}	
-		html = html +'</tr>';
-	}
-	html = html + '</table>';
-	$('.view-panel').html(html).css('top');
-	cellWidth = parseInt($('.scenario-cell').css('width').replace(/\D/g,''));
-	cellHeight = parseInt($('.scenario-cell').css('height').replace(/\D/g,''));
+var answerCounter = 0;
+var commonQuestionParams = {
 	
-	// build out the constraining box
-	/*
-	$.ajax({
-		url: "/scenario/ajax/buildgrid",
-		type: "POST",
-		data: post,
-		cache: false,
-		success: function(data){
-			data = $.parseJSON(data);
-			if (data.success === true)
-			{
-				$('.view-panel').html(data.view);
-			}
-			else
-			{
-				//return data.error;
-			}
-		}	
-	});
-	*/
-}
+}; 
+var commonAnswerParams = {
+	
+}; 
 
 var buildAnswer = function(){
 	
@@ -49,52 +14,26 @@ var moveNode = function(){
 	
 }
 
-var buildNode = function(row, col){
-	if (typeof row === 'undefined')
-	{
-		row = 1;
-	}
-	if (typeof col === 'undefined')
-	{
-		col = 15;
-	}
-	var html = '<div class="node-div"></div>';
+var buildQuestion = function(top, left){
+	var html = '<div class="question-div" id="testSource"></div>';
 	$('.view-panel').prepend(html);
-	// add the arrows
-	var node = $('.view-panel div:first');
-	node.append('<div class="node-left-arrow node-arrow"></div>');
-	node.append('<div class="node-bottom-left-arrow node-arrow"></div>')
-	node.append('<div class="node-bottom-arrow node-arrow"></div>');
-	node.append('<div class="node-bottom-right-arrow node-arrow"></div>')
-	node.append('<div class="node-right-arrow node-arrow"></div>');
-	node.append('<form method="post" action="#" class="node-form"><textarea class="node-textarea" name="question"></textarea></form>');
-	node.find('textarea').css('width', (cellWidth * nodeDefaultSize[0]) + (nodeDefaultSize[0] * 2)).css('height', (cellHeight * nodeDefaultSize[1]) + (nodeDefaultSize[1] * 2));
-	node.css('width', (cellWidth * nodeDefaultSize[0]) + (nodeDefaultSize[0] * 2)).css('height', (cellHeight * nodeDefaultSize[1]) + (nodeDefaultSize[1] * 2));
-	node.css('left', ((cellWidth + 2) * col));
-	node.css('top', ((cellHeight + 2) * row));
-	node.children('.node-left-arrow').css('top', (parseInt(node.height()) / 2) - 10).css('left', -20);
-	node.children('.node-bottom-left-arrow').css('top', parseInt(node.height())).css('left', -20);
-	node.children('.node-bottom-arrow').css('top', parseInt(node.height())).css('left', 40);
-	node.children('.node-bottom-right-arrow').css('top', parseInt(node.height())).css('left', 100);
-	node.children('.node-right-arrow').css('top', (parseInt(node.height()) / 2) - 10).css('left', 100);
-	node.find('textarea').focus();
+	currentNode = $('.view-panel div:first');
+	currentNode.append('<form method="post" action="#" class="node-form"><textarea class="question-textarea" name="question"></textarea></form>');
+	//node.find('textarea').css('width', '100%').css('height', '100%');
+	//node.css('width', (cellWidth * nodeDefaultSize[0]) + (nodeDefaultSize[0] * 2)).css('height', (cellHeight * nodeDefaultSize[1]) + (nodeDefaultSize[1] * 2));
+	if (typeof top == 'undefined')
+	{
+		var top = 50;
+	}
+	if (typeof left == 'undefined')
+	{
+		var left = 250;
+	}
+	currentNode.css('top', top);
+	currentNode.css('left', left);
+	currentNode.find('textarea').focus();
 	$('.scenario-input').val("");
-	
-	/*
-	node.find('textarea').draggable({
-		containment:".view-panel", 
-		snap: ".scenario-cell", 
-		snapMode: "outer",
-	});
-	node.resizable({
-		containment:".view-panel",
-		grid: nodeWidth,
-		snapMode: "outer",
-		
-	})
-	 */
-	
-	
+	jsPlumb.draggable(currentNode);
 };
 
 
@@ -152,16 +91,91 @@ var searchScenarios = function(needle){
 		}
     });
 }
-var searchNodes = function(needle){
+
+var buildQuestionEndpoints = function(questionDiv){
+	// now create the endpoints
+	// here we can check for existing connections to other answers and quesitons
+	jsPlumb.addEndpoint(
+		currentNode,
+		{
+			anchor:'LeftMiddle',
+			endpoint:['Dot', {radius:7}],
+			connector:"Straight",
+		}
+	).bind('click', function(event){
+			alert('clicked!');
+	});
 	
-}
-var findArrowLocations = function(nodeObject){
-	var data = [];
-	//
+	jsPlumb.addEndpoint(
+		currentNode,
+		{
+			anchor:'BottomLeft',
+			endpoint:['Dot', {radius:7}],
+			connector:"Straight",
+		}
+	).bind('click', function(event){
+			alert('clicked!');
+	});
 	
+	jsPlumb.addEndpoint(
+		currentNode,
+		{
+			anchor:'LeftMiddle',
+			endpoint:['Dot', {radius:7}],
+			connector:"Straight",
+		}
+	).bind('click', function(event){
+			alert('clicked!');
+	});
+	
+	jsPlumb.addEndpoint(
+		currentNode,
+		{
+			anchor:'BottomCenter',
+			endpoint:['Dot', {radius:7}],
+			connector:"Straight",
+		}
+	).bind('click', function(event){
+			alert('clicked!');
+	});
+	
+	jsPlumb.addEndpoint(
+		currentNode,
+		{
+			anchor:'BottomRight',
+			endpoint:['Dot', {radius:7}],
+			connector:"Straight",
+		}
+	).bind('click', function(event){
+			alert('clicked!');
+	});
+	
+	jsPlumb.addEndpoint(
+		currentNode,
+		{
+			anchor:'RightMiddle',
+			endpoint:['Dot', {radius:7}],
+			connector:"Straight",
+		}
+	).bind('click', function(event){
+			alert('clicked!');
+	});
+	
+	
+	console.log(currentNode);
+	/*
+	jsPlumb.connect({
+		source:'testSouce',
+		target:'testTarget',
+		endpoint:'Rectangle',
+	});
+	*/
 }
-$('.node-textarea').live('keydown', function(event){
-	var post = $(this).serialize();
+
+
+$('.question-textarea').live('keydown', function(event){
+	$this = $(this);
+	var post = $this.serialize();
 	if (typeof currentScenarioId !== undefined)
 	{
 		var post = post + '&scenario_id=' + currentScenarioId;
@@ -177,13 +191,17 @@ $('.node-textarea').live('keydown', function(event){
 	        data = $.parseJSON(data);
 				if (data['success'] === true)
 				{
-					
-					//console.log(data['view']);
-					//$('.search-results').html(data['view']);
-					currentScenarioId = undefined;
+					currentNodeId = $.parseJSON(data['view'])._id;
+					// set the id
+					currentNode.attr('id', 'id-'+currentNodeId);
+					// blur textfield and disable for now
+					$this.blur().attr('disabled', 'disabled').css('background-color', 'transparent');
+					buildQuestionEndpoints(currentNode);
 				}
 				else
 				{
+					alert('error');
+					console.log(data);
 					/*
 					for (var key in data.errors)
 					{
@@ -192,7 +210,7 @@ $('.node-textarea').live('keydown', function(event){
 						$('.error').fadeIn('slow').delay(2000).fadeOut();
 					}
 					*/
-					currentScenarioId = undefined;
+					//currentScenarioId = undefined;
 				}
 			}
     	});	
@@ -206,6 +224,63 @@ $('form#scenario-form').live('submit', function(event){
 	
 	$.ajax({
         url: "/scenario/ajax/newscenario",
+        type: "POST",
+        data: data,    
+        cache: false,
+        success: function(data){
+        	data = $.parseJSON(data);
+			if (data['success'] === true)
+			{
+				// clear the view panel
+				$('.view-panel').html("");
+				$this.parent().before(data['view']);
+				currentScenarioId = $this.parent().prev().attr('data-id');
+				buildQuestion();
+			}
+			else
+			{
+				for (var key in data.errors)
+				{
+					var error = data.errors[key];
+					$this.after('<span style="display:none" class="error">'+error+'</span>');
+					$('.error').fadeIn('slow').delay(2000).fadeOut();
+				}
+			}
+		}
+    });
+	return false;	
+});
+
+$('.node-arrow').live('click', function(event){
+	answerCounter++;
+	$this = $(this);
+	console.log($this.parent().height());
+	//var = nodeTerminalPosition = $this.position
+	//console.log($this.position().top);
+	var nodeTerminalPosition = $this.parent().position();
+	nodeTerminalPosition.top = (nodeTerminalPosition.top + ($this.parent().height() * 1.5));
+	
+	nodeTerminalPosition.left = (nodeTerminalPosition.left - ($this.parent().width() * 1.75));
+	$this.parent().after('<div class="answer-div" id="id-'+answerCounter+'"></div>');
+	var answerDiv = $this.parent().next();
+	console.log(YAHOO);
+	answerDiv.css('top', nodeTerminalPosition.top);
+	answerDiv.css('left', nodeTerminalPosition.left);
+	var questionNode = YAHOO.util.Dom.get('id-'+currentNodeId);
+	var answerNode = YAHOO.util.Dom.get('id-'+answerCounter);
+	alert('made it here');
+	/*
+	var block7 = YAHOO.util.Dom.get('block7');
+	var w1 = new WireIt.Wire(
+		new WireIt.Terminal(block7, {offsetPosition:[30,30], editable: false }),
+		new WireIt.Terminal(block7, {offsetPosition:[100,30], editable: false }), 
+		document.body);
+	w1.redraw();
+	*/
+	
+	/*
+	$.ajax({
+        url: "/scenario/ajax/newanswer",
         type: "POST",
         data: data,    
         cache: false,
@@ -229,31 +304,33 @@ $('form#scenario-form').live('submit', function(event){
 			}
 		}
     });
-	return false;	
+	buildNode(10, 25);
+	*/
+});
+$('#scenario-input').live('keyup', function(){
+	searchString = $(this).val();
+	if (searchString != '')
+	{
+		searchScenarios(searchString);
+	}
+	else
+	{
+		$('.search-results').html('');
+	}
+});
+	
+$('.search-result-li').live('click', function() {
+	buildScenario($(this).attr('id'));
 });
 
-$('.node-arrow').live('click', function(event){
-	$this = $(this);
-	buildNode(10, 25);
-});
 
 $(document).ready(function () {
-	buildGrid();
-	//console.log($('#scenario-input'));
-	$('#scenario-input').live('keyup', function(){
-		searchString = $(this).val();
-		if (searchString != '')
-		{
-			searchScenarios(searchString);
-		}
-		else
-		{
-			$('.search-results').html('');
-		}
-	});
+	// set default container
+	jsPlumb.Defaults.Container = $(".view-panel");
 	
-	$('.search-result-li').live('click', function() {
-		buildScenario($(this).attr('id'));
-	});
+	
+	//buildGrid();
+	
+	//console.log($('#scenario-input'))
 });
 
