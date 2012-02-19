@@ -300,9 +300,9 @@ class Controller_Scenario_Ajax extends Controller
 		{
 			if ( ! isset($_POST['node_id']))//check for no node id
 			{
-				if ( ! isset($_POST['answer_key']))//check for no answer key
+				if ( ! isset($_POST['new_answer']))//check for no answer key
 				{
-					$new_node = Scenario::factory()->create_answer($_POST['node_id'], $_POST['answer_key']);//create answer
+					$new_node = Scenario::factory()->create_answer($_POST['new_answer'], $_POST['node_id'] );//create answer
 					if ( $new_node->errors === null )//check for core errors
 					{
 						echo json_encode(array('success' => true, 'view' => (string) $new_node->render('newnode')));//report success and send over the view
