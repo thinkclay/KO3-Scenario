@@ -28,7 +28,7 @@ class Controller_Scenario_Ajax extends Controller
 			$the_scenario = Scenario::factory()->create_scenario($_POST);//create the new scenario
 			if ($the_scenario->errors === null)//check for errors
 			{
-				echo json_encode(array('success' => true, 'view' => (string) $the_scenario->render('li')));//report success
+				echo json_encode(array('success' => true, 'data'=> $the_scenario->data, 'view' => (string) $the_scenario->render('li')));//report success
 			}
 			else
 			{
@@ -50,7 +50,7 @@ class Controller_Scenario_Ajax extends Controller
 			$the_node = Scenario::factory()->create_node($_POST);//create the node
 			if ($the_node->errors === null)//check for errors
 			{
-				echo json_encode(array('success' => true, 'view' => (string) $the_node->render('newnode')));//report success
+				echo json_encode(array('success' => true, 'data'=> $the_node->data, 'view' => (string) $the_node->render('newnode')));//report success
 			}
 			else
 			{
@@ -78,7 +78,7 @@ class Controller_Scenario_Ajax extends Controller
 			}
 			if ($the_scenarios->errors === null)//check for errors
 			{
-				echo json_encode(array('success' => true, 'view' => (string) $the_scenarios->render('scenarios')));//report errors
+				echo json_encode(array('success' => true, 'data'=> $the_scenarios->data, 'view' => (string) $the_scenarios->render('scenarios')));//report errors
 			}
 			else
 			{
@@ -96,7 +96,7 @@ class Controller_Scenario_Ajax extends Controller
 	{
 		if ( ! empty($_POST))//check for no post data
 		{
-			if ( $_POST['all'] == true )//check if the user wants all of the nodes
+			if ($_POST['all'] === true)//check if the user wants all of the nodes
 			{
 				$the_nodes = Scenario::factory()->get_node(true);//get all the nodes
 			}	
@@ -106,7 +106,7 @@ class Controller_Scenario_Ajax extends Controller
 			}
 			if ($the_nodes->errors === null)//check for errors
 			{
-				echo json_encode(array('success' => true, 'view' => $the_nodes->render('nodes')));//report success
+				echo json_encode(array('success' => true, 'data'=> $the_nodes->data, 'view' => (string) $the_nodes->render('nodes')));//report success
 			}
 			else
 			{
@@ -126,7 +126,7 @@ class Controller_Scenario_Ajax extends Controller
 		{
 			$scenario = Scenario::factory();//load up a scenario object
 			$scenario->data = $_POST['size'];//set the object's data var to the size of the grid you want to build
-			echo json_encode(array('success' => true, 'view' => (string) $scenario->render('buildgrid')));//render the grid and echo it to the view
+			echo json_encode(array('success' => true, 'data'=> $scenario->data, 'view' => (string) $scenario->render('buildgrid')));//render the grid and echo it to the view
 		}
 		else
 		{
@@ -153,7 +153,7 @@ class Controller_Scenario_Ajax extends Controller
 				$scenario = Scenario::factory()->update_scenario($update_data, $scenario_id);//load up the scenario object and run an update on the scenario
 				if ($scenario->errors === null)
 				{
-					echo json_encode(array('success' => true, 'view' => (string) $scenario->render('updatescenario')));//report success and send over the view
+					echo json_encode(array('success' => true, 'data'=> $scenario->data, 'view' => (string) $scenario->render('updatescenario')));//report success and send over the view
 				}
 				else
 				{
@@ -190,7 +190,7 @@ class Controller_Scenario_Ajax extends Controller
 				$node = Scenario::factory()->update_node($update_data, $node_id);//load up the scenario object and run an update on the node
 				if ($node->errors === null)
 				{
-					echo json_encode(array('success' => true, 'view' => (string) $node->render('updatenode')));//report success and send over the view
+					echo json_encode(array('success' => true, 'data'=> $node->data, 'view' => (string) $node->render('updatenode')));//report success and send over the view
 				}
 				else
 				{
@@ -218,7 +218,7 @@ class Controller_Scenario_Ajax extends Controller
 				$scenarios = Scenario::factory()->search_scenarios($_POST['search_string']);//load the scenario object and call search_scenarios()
 				if ($scenarios->errors === null)//make sure there were no errors
 				{
-					echo json_encode(array('success' => true, 'view' => (string) $scenarios->render('searchscenarios')));//report success and send over the view
+					echo json_encode(array('success' => true, 'data'=> $scenarios->data, 'view' => (string) $scenarios->render('searchscenarios')));//report success and send over the view
 				}
 				else
 				{
@@ -246,7 +246,7 @@ class Controller_Scenario_Ajax extends Controller
 				$nodes = Scenario::factory()->search_nodes($_POST['search_string']);//load the scenario object and call search_nodes()
 				if ($nodes->errors === null)//make sure there were no errors
 				{
-					echo json_encode(array('success' => true, 'view' => (string) $nodes->render('searchnodes')));//report success and send over the view
+					echo json_encode(array('success' => true, 'data'=> $nodes->data, 'view' => (string) $nodes->render('searchnodes')));//report success and send over the view
 				}
 				else
 				{
@@ -275,7 +275,7 @@ class Controller_Scenario_Ajax extends Controller
 				$scenario = Scenario::factory()->delete_scenario($scenario_id);//load the scenario object and delete the scenario
 				if ( $scenario->errors === null )//check for core errors
 				{
-					echo json_encode(array('success' => true, 'view' => (string) $scenario->render('deletescenario')));//report success and send over the view
+					echo json_encode(array('success' => true, 'data'=> $scenario->data, 'view' => (string) $scenario->render('deletescenario')));//report success and send over the view
 				}
 				else
 				{
@@ -298,14 +298,14 @@ class Controller_Scenario_Ajax extends Controller
 	{
 		if ( ! empty($_POST))//check for empty post
 		{
-			if ( ! isset($_POST['node_id']))//check for no node id
+			if ( isset($_POST['node_id']))//check for no node id
 			{
-				if ( ! isset($_POST['new_answer']))//check for no answer key
+				if ( isset($_POST['new_answer']))//check for no answer key
 				{
 					$new_node = Scenario::factory()->create_answer($_POST['new_answer'], $_POST['node_id'] );//create answer
 					if ( $new_node->errors === null )//check for core errors
 					{
-						echo json_encode(array('success' => true, 'view' => (string) $new_node->render('newnode')));//report success and send over the view
+						echo json_encode(array('success' => true, 'data'=> $new_node->data, 'view' => (string) $new_node->render('nodes')));//report success and send over the view
 					}
 					else
 					{
@@ -342,7 +342,7 @@ class Controller_Scenario_Ajax extends Controller
 						$updated_node = Scenario::factory()->update_answer($_POST['new_answer'], $_POST['node_id'], $_POST['answer_key_to_update']);//update the answer
 						if ( $updated_node->errors === null )//check for core errors
 						{
-							echo json_encode(array('success' => true, 'view' => (string) $updated_node->render('updatednode')));//report success and send over the view
+							echo json_encode(array('success' => true, 'data'=> $updated_node->data, 'view' => (string) $updated_node->render('updatednode')));//report success and send over the view
 						}
 						else
 						{
@@ -382,7 +382,7 @@ class Controller_Scenario_Ajax extends Controller
 					$updated_node = Scenario::factory()->delete_answer($_POST['node_id'], $_POST['answer_key_to_delete']);//delete the answer
 					if ( $updated_node->errors === null )//check for core errors
 					{
-						echo json_encode(array('success' => true, 'view' => (string) $updated_node->render('updatednode')));//report success and send over the view
+						echo json_encode(array('success' => true, 'data'=> $updated_node->data, 'view' => (string) $updated_node->render('updatednode')));//report success and send over the view
 					}
 					else
 					{

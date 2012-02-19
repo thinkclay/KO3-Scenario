@@ -62,6 +62,7 @@ class Scenario_Core
 		{
 			$new_scenario['created'] = time();//get the current timestamp
 			$the_scenario = Mango::factory('Mango_Scenario', $new_scenario); //load up a new mango object with the passed in data
+			
 			try
 			{
 				$the_scenario->check(); // check that the scenario conforms to the mango model
@@ -73,6 +74,7 @@ class Scenario_Core
 			}
 			$the_scenario->create();//create the new scenario in the db
 			$this->data = $the_scenario->as_array();//set the data var with the new scenario
+			$this->data['_id'] = (string) $this->data['_id'];
 			return $this;//return the scenario object
 		} 
 		else 
@@ -108,7 +110,7 @@ class Scenario_Core
 					}
 					$this->create_node(array('question' => $node_id.' Choice '.$answer_counter, 'creator' => 'system'));//create the new node
 					$newly_created_node_id = $this->data['_id'];//set the $newly_created_node_id with the data that was just set with create_node()
-					unset($previous_node_array['_id']);//unsite the _id field of the previous array ...it is not needed and will throw the mango model off
+					unset($previous_node_array['_id']);//unset the _id field of the previous array ...it is not needed and will throw the mango model off
 					$previous_node_array['answers'][$newly_created_node_id] = $new_answer;//set the next element in the previous nodes answer array
 					$this->update_node($previous_node_array, $node_id)->get_node(false, array($newly_created_node_id));//update the previous node and then call get_node so that the data you return will be the newly created node
 					return $this;//return the scenario object

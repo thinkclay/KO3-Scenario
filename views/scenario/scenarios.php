@@ -1,9 +1,2 @@
-<div>
-	<pre>
-	<?php
-		foreach($data as $scenario){
-			print_r($scenario);
-		} 
-	?>
-	</pre>
-</div>
+
+<?php echo "<pre>"; print_r($data); echo "</pre>"; ?>
