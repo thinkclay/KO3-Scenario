@@ -42,7 +42,7 @@ class Controller_Scenario_Ajax extends Controller
 	}
 	
 	
-	public function action_newnode()
+	public function action_newquestion()
 	{
 		if ( ! empty($_POST))//check for no post data
 		{
