@@ -35,35 +35,31 @@ echo html::script("resources/scenario/scripts/admin.js");
 
 ?>  
 <div id="scenario-admin">
-	<div class="left-panel">
+	<div class="panel-wrapper">
 		<div class="view-panel">
 			
 		</div>
 	</div>
-	
-	<div class="right-panel">
-		<ul class="scenario-list">
-			
-				<?php 
-					foreach ($data as $scenario)
-					{
-						echo '<li data-id="'.(string) $scenario['_id'].'">'.$scenario['title'].'</li>';
-					} 
-				?>
-				<li>
-					<form action="#" method="post" id="scenario-form">
-						<input id="scenario-input" type="text" name="title" class="scenario-input" />
-					</form>
-					<div class="search-results"></div>
-				</li>
-		</ul>
+	<div class="control-panel">
+		<div class="control-container">
+			<div class="control-main">
+				<form class="scenario-form">
+					<label class="sunk-in smaller" title="New Scenario">New Scenario<input id="scenario-input" type="text" name="title"></input></label>
+				</form>
+				<ul class="scenario-list">
+					<?php 
+						foreach($data as $scenario)
+						{
+							echo '<li data-id="'.$scenario['_id'].'" class="sunk-in smaller scenario-li" title="'.$scenario['title'].'">'.$scenario['title'].'</li>';
+						}
+					 ?>
+				</ul>
+			</div>
+			<div class="control-bottom"><p class="sunk-in smaller" title="Controls">Controls</p></div>
+		</div>
+		<div class="add-media-panel">
+			<p title="Choose Media Type" class="sunk-in">Choose Media Type<p>
+			<div class="media-choices"><p data-type="video" title="Add a VIDEO to this Question." class="sunk-in smaller">Add a VIDEO to this Question.</p><p data-type="document" title="Add an IMAGE to this Question." class="sunk-in smaller">Add an IMAGE to this Question.</p><p data-type="document" title="Add a DOCUMENT to this Question." class="sunk-in smaller">Add a DOCUMENT to this Question.</p></div>
+		</div>
 	</div>
-	<!--
-	<ul class="control-bar">
-		<li class="new-scenario">New Scenario</li>
-		<li>Button 2</li>
-		<li>Button 3</li>
-		<li>Button 4</li>
-	</ul>
-	-->
 </div>
