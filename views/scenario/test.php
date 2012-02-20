@@ -1,7 +1,259 @@
-<?php
-echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>';
-echo html::style("resources/scenario/styles/test.css");
-?>
+<style type="text/css">
+#main { min-height: 800px; }
+
+.question-node {
+    background-image: -webkit-linear-gradient(top, #4293d6 0%, #001e96 100%);
+    overflow: visible;
+    width: 350px;
+    height: 200px;
+    border-radius: 5px;
+    border-style: solid;
+	border-color: #4293d6;
+	box-shadow: 6px 6px 8px -4px #000000;
+	position: relative;
+	left: 100px;
+}
+.sunk-in {
+    display: block;
+    padding: 10px;
+    color: black;
+    font: bold 1.5em Arial, sans-serif;
+    position: relative;
+}
+.sunk-in:before, .sunk-in:after {
+    content: attr(title);
+    padding: 10px;
+    color: rgba(255,255,255,.1);
+    position: absolute;
+}
+.sunk-in:before {
+    top: 1px;
+    left: 1px;
+}
+.sunk-in:after {
+    top: 2px;
+    left: 2px;
+}
+.terminal-post {
+	background-image: url('/resources/images/bryantest/terminal-post.png');
+	width: 25px;
+	height: 25px;
+}
+
+.terminal-post:hover {
+	background-image: url('/resources/images/bryantest/terminal-post-hover.png');
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+}
+
+.terminal-post-filled {
+	background-image: url('/resources/images/bryantest/terminal-post-hover.png');
+	width: 25px;
+	height: 25px;
+}
+
+.post-left-middle {
+	margin-top: -65px;
+	margin-left: -30px;
+	position: absolute;
+}
+
+.post-bottom-left-corner {
+	margin-top: 73px;
+	margin-left: -27px;
+	position: absolute;
+}
+
+.post-bottom-middle {
+	margin-top: 78px;
+	margin-left: 160px;
+	position: absolute;
+}
+
+.post-bottom-right-corner {
+	margin-top: 73px;
+	margin-left: 350px;
+	position: absolute;
+}
+
+.post-right-middle {
+	margin-top: -65px;
+	margin-left: 355px;
+	position: absolute;
+}
+
+.answer-post-top-middle {
+	margin-top: -30px;
+	margin-left: 135px;
+	position: absolute;
+}
+
+.answer-post-bottom-middle {
+	margin-top: 80px;
+	margin-left: 135px;
+	position: absolute;
+}
+
+.media-button {
+	background-image: url('/resources/images/bryantest/media-arrow.png');
+	width: 38px;
+	height: 38px;
+	cursor: pointer;
+}
+
+.media-message-div {
+	font: bold .5em Arial, sans-serif;
+	display: none;
+	margin-top: -47px;
+	margin-left: 22px;
+}
+
+.add-media-panel {
+	background-image: -webkit-linear-gradient(top, #a0cd34 0%, #556f17 100%);
+    overflow: visible;
+    border-radius: 5px;
+    border-style: solid;
+	border-color: #a0cd34;
+	box-shadow: 6px 6px 8px -4px #000000;
+	display: none;
+	margin-top: 10px;
+	
+}
+
+.answer-node {
+	background-image: -webkit-linear-gradient(top, #ef9200 0%, #714501 100%);
+    overflow: visible;
+    width: 300px;
+    height: 75px;
+    border-radius: 5px;
+    border-style: solid;
+	border-color: #ef9200;
+	box-shadow: 6px 6px 8px -4px #000000;
+	position: relative;
+	margin: 50px;
+}
+
+.answer-node input {
+	margin-top: -13px;
+	margin-left: 10%;
+	width: 80%;
+	border-radius: 5px;
+    border-style: solid;
+	border-color: #714501;
+	background-color: #ef9200;
+}
+
+.answer-node input:focus {
+	outline: none;
+}
+
+.answer-node p {
+	margin-top: 4px;
+	margin-left: 7%;
+}
+
+.control-panel {
+	position: absolute;
+	top: 100px;
+	right: 2%;
+	width: 24%;
+}
+
+.control-container {
+	background-color: #ffffff;
+	top: 0px;
+	background-image: -webkit-linear-gradient(top, #4293d6 0%, #001e96 100%);
+    overflow: visible;
+    border-radius: 5px;
+    border-style: solid;
+	border-color: #4293d6;
+	box-shadow: 6px 6px 8px -4px #000000;
+	margin-top: -5px;
+}
+
+.media-choices p{
+	cursor: pointer;
+}
+
+.control-bottom {
+	cursor: pointer;
+	height: 40px;
+}
+
+.control-main {
+	display: none;
+	max-height: 600px;
+}
+
+.control-main li{
+	width: 80%;
+	cursor: pointer;
+}
+
+.control-main li:hover{
+	color: #a0cd34;
+}
+
+.scenario-form {
+	width: 100%;
+	padding-left: 10%;
+}
+
+
+.scenario-form input{
+	width: 80%;
+	border-radius: 5px;
+    border-style: solid;
+	border-color: #001e96;
+	background-color: #4293d6;
+}
+
+.scenario-form input:focus {
+	outline: none;
+}
+
+.question-textarea {
+	width: 83%;
+	height: 68%;
+	margin-left: 5%;
+	background-color: #4293d6;
+	border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+	border-color: #001e96;
+	box-shadow: 0;
+	color: #2C2C2C;
+}
+
+.question-textarea:focus {
+	outline: none;
+}
+
+.question-label {
+	margin-left: 3%;
+}
+
+.question-button {
+	color: #4293d6;
+	border: 1px solid #4293d6;
+	background-color: #001e96;
+	font-weight: bold;
+	border-radius: 5px;
+	position: relative;
+	left: 83%;
+	cursor: pointer;
+	margin-top: 5px;
+}
+
+.question-submit {
+	position: relative;
+	margin-top: -17px;
+	margin-left: 67%;
+	cursor: pointer;
+}	
+</style>
+
 <div class="canvas-container">
 	<!--
 	<div class="question-node">
